@@ -7,19 +7,19 @@ interface InputFieldProps extends React.DetailedHTMLProps<React.InputHTMLAttribu
     touched?: boolean
 }
 
-const InputField: React.FC<InputFieldProps> = ({errorMessage, id, label, touched = 'false', ...rest}) => {
+const InputField: React.FC<InputFieldProps> = ({ errorMessage, id, label, touched = false, ...rest }) => {
     return (
         <div className='sm:col-span-3'>
             <label
                 htmlFor={id}
-                className='block text-sm font-medium text-gray-700'
+                className='block text-sm font-medium text-gray-700 dark:text-white'
             >
                 {label}
             </label>
             <div className='mt-1'>
                 <input
                     id={id}
-                    className='block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                    className='block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-white dark:bg-[#E354B1]'
                     {...rest}
                 />
                 {errorMessage && touched && (

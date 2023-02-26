@@ -1,5 +1,6 @@
 import type {NextPage} from 'next';
 import {useState, useEffect} from 'react';
+
 import {request} from '../utils/frontEnd';
 import ClientTable from '../components/tables/client';
 import {IClient, IRegisterClient} from "../types";
@@ -9,8 +10,8 @@ const Index: NextPage = () => {
     const [clients, setClients] = useState<IClient[]>([])
 
     useEffect(() => {
+        //get clients data using api/clients
         try {
-            //get clients data using api/clients
             request('GET', '/clients').then(({body: data, status}) => {
                 if (status === 200) {
                     setClients(data?.clients.map((client: IClient) => ({
@@ -22,7 +23,7 @@ const Index: NextPage = () => {
         } catch(err) {
         }
     }, [])
-
+    //Register data for client
     const onRegister = async (data: IRegisterClient) => {
         try {
             const result = await request('POST', '/clients', data)

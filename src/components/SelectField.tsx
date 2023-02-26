@@ -18,14 +18,14 @@ const SelectField: React.FC<SelectFieldProps> = ({errorMessage, id, label, place
         <div className='sm:col-span-3'>
             <label
                 htmlFor={id}
-                className='block text-sm font-medium text-gray-700'
+                className='block text-sm font-medium text-gray-700 dark:text-white'
             >
                 {label}
             </label>
             <div className='mt-1'>
                 <select
                     id={id}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-white dark:bg-[#E354B1]"
                     {...rest}
                 >
                     {options.map(({value, label}) => <option key={value} value={value}>{label}</option>)}

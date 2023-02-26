@@ -15,3 +15,11 @@ body {
     left: 0;
     right: 0;
 }
+
+.dark_blue-linear-bg {
+  background: linear-gradient(265.68deg, #5d2d91 0%, #d75227 100%);
+}
+
+.orange-linear-bg {
+  background: linear-gradient(269.37deg, #e279bd -1.07%, #ffbe00 106.75%);
+}

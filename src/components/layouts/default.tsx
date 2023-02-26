@@ -1,4 +1,5 @@
-import React, { Fragment, useState } from 'react';
+
+import { Fragment, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
 import {
     Bars3BottomLeftIcon,
@@ -12,8 +13,7 @@ import {
     XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import {LayoutProps} from "../../types";
-import { useRouter } from 'next/router'
+import ToggleColorTheme from '../theme/ToggleColorTheme';
 
 const navigation = [
     { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
@@ -33,13 +33,8 @@ function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ');
 }
 
-export default function DefaultLayout({ children }: LayoutProps) {
-    const router = useRouter()
+export default function DefaultLayout({ children }: {children: React.ReactNode}) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-
-    const handleSearch = (value: string) => {
-        router.push(value.length > 0 ? `/?highlight=${value}` : '/', undefined, { shallow: true })
-    }
 
     return (
         <>
@@ -115,16 +110,16 @@ export default function DefaultLayout({ children }: LayoutProps) {
                                                     href={item.href}
                                                     className={classNames(
                                                         item.current
-                                                            ? 'bg-gray-100 text-gray-900'
-                                                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                                            ? 'bg-gray-100 dark:bg-[#E354B1] text-gray-900 dark:text-white'
+                                                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-white',
                                                         'group flex items-center px-2 py-2 text-base font-medium rounded-md'
                                                     )}
                                                 >
                                                     <item.icon
                                                         className={classNames(
                                                             item.current
-                                                                ? 'text-gray-500'
-                                                                : 'text-gray-400 group-hover:text-gray-500',
+                                                                ? 'text-gray-500 dark:text-white'
+                                                                : 'text-gray-400 group-hover:text-gray-500 dark:text-white',
                                                             'mr-4 flex-shrink-0 h-6 w-6'
                                                         )}
                                                         aria-hidden='true'
@@ -149,7 +144,7 @@ export default function DefaultLayout({ children }: LayoutProps) {
                 {/* Static sidebar for desktop */}
                 <div className='hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col'>
                     {/* Sidebar component, swap this element with another sidebar if you like */}
-                    <div className='flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5'>
+                    <div className='flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white dark:bg-[#e279bd] pt-5'>
                         <div className='flex flex-shrink-0 items-center px-4'>
                             <img
                                 className='h-8 w-auto'
@@ -165,16 +160,16 @@ export default function DefaultLayout({ children }: LayoutProps) {
                                         href={item.href}
                                         className={classNames(
                                             item.current
-                                                ? 'bg-gray-100 text-gray-900'
-                                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                                ? 'bg-gray-100 dark:bg-[#E354B1] text-gray-900 dark:text-white'
+                                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-white',
                                             'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
                                         )}
                                     >
                                         <item.icon
                                             className={classNames(
                                                 item.current
-                                                    ? 'text-gray-500'
-                                                    : 'text-gray-400 group-hover:text-gray-500',
+                                                    ? 'text-gray-600 dark:text-gray-100'
+                                                    : 'text-gray-500 dark:text-gray-300 group-hover:text-gray-500',
                                                 'mr-3 flex-shrink-0 h-6 w-6'
                                             )}
                                             aria-hidden='true'
@@ -187,7 +182,7 @@ export default function DefaultLayout({ children }: LayoutProps) {
                     </div>
                 </div>
                 <div className='flex flex-1 flex-col lg:pl-64'>
-                    <div className='sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow'>
+                    <div className='sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white dark:bg-[#e279bd] shadow'>
                         <button
                             type='button'
                             className='border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 lg:hidden'
@@ -205,11 +200,10 @@ export default function DefaultLayout({ children }: LayoutProps) {
                                     className='flex w-full lg:ml-0'
                                     action='#'
                                     method='GET'
-                                    onSubmit={event => event.preventDefault()}
                                 >
                                     <label
                                         htmlFor='search-field'
-                                        className='sr-only'
+                                        className='sr-only dark:text-white'
                                     >
                                         Search
                                     </label>
@@ -222,19 +216,21 @@ export default function DefaultLayout({ children }: LayoutProps) {
                                         </div>
                                         <input
                                             id='search-field'
-                                            className='block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm'
+                                            className='block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 dark:placeholder-white focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm bg-white dark:bg-[#e279bd]'
                                             placeholder='Search'
                                             type='search'
                                             name='search'
-                                            onChange={event => handleSearch(event.target.value)}
                                         />
                                     </div>
                                 </form>
                             </div>
+                            <div className='flex items-center'>
+                                <ToggleColorTheme />
+                            </div>
                             <div className='ml-4 flex items-center lg:ml-6'>
                                 <button
                                     type='button'
-                                    className='rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                                    className='rounded-full bg-white dark:bg-[#E354B1] p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                                 >
                                     <span className='sr-only'>
                                         View notifications
@@ -293,8 +289,8 @@ export default function DefaultLayout({ children }: LayoutProps) {
                         </div>
                     </div>
 
-                    <main className='flex-1'>
-                        <div className='py-6'>
+                    <main className='flex-1 bg-gray-200 dark:bg-[#e354b1]'>
+                        <div className='py-6 bg-white dark:bg-[#e354b1]'>
                             <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
                                 {children}
                             </div>

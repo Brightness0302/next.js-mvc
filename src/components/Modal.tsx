@@ -1,13 +1,7 @@
 import React, {Fragment} from 'react';
 import {Dialog, Transition} from "@headlessui/react";
 
-interface RegisterClientModalProps{
-    children: React.ReactNode
-    open: boolean
-    handleClose: () => void
-}
-
-const RegisterClientModal: React.FC<RegisterClientModalProps> = ({open, handleClose, children}) => {
+const RegisterClientModal = ({ open, handleClose, children }: { open: boolean, handleClose: () => void, children: React.ReactNode }) => {
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as='div' className='relative z-10' onClose={handleClose}>
@@ -35,7 +29,7 @@ const RegisterClientModal: React.FC<RegisterClientModalProps> = ({open, handleCl
                             leaveTo='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
                         >
                             <Dialog.Panel
-                                className='relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md sm:p-6'>
+                                className='relative transform overflow-hidden rounded-lg bg-white dark:bg-[#e279bd] px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md sm:p-6'>
                                 {children}
                             </Dialog.Panel>
                         </Transition.Child>
