@@ -1,48 +1,41 @@
-import type { NextPage } from 'next';
-import React, { useState, useEffect } from 'react';
-import { request } from '../utils/frontEnd';
+import type {NextPage} from 'next';
+import {useState, useEffect} from 'react';
+import {request} from '../utils/frontEnd';
 import ClientTable from '../components/tables/client';
-import { InferGetStaticPropsType } from 'next';
+import {IClient, IRegisterClient} from "../types";
 
-type ClientData = [
-    id: string,
-    avatar: string,
-    birthday: Date, 
-    email: string,
-    firstName: string,
-    lastName: string,
-    sex: string, 
-    supportTier: 'standard' | 'gold' | 'platinum',
-    hourlyRate: number,
-];
+const Index: NextPage = () => {
+    //initialize clients data
+    const [clients, setClients] = useState<IClient[]>([])
 
-export const getStaticProps = async () => {
-    try {
-        const res = await fetch('http://localhost:3000/api/clients');
-        const clients: ClientData = await res.json();
-    
-        return {
-          props: {
-            clients, 
-          },
-        };
-    }
-    catch(err) {
-        console.log(err)
-        return null
-    }
-    
-};
+    useEffect(() => {
+        try {
+            //get clients data using api/clients
+            request('GET', '/clients').then(({body: data, status}) => {
+                if (status === 200) {
+                    setClients(data?.clients.map((client: IClient) => ({
+                        ...client,
+                        fullName: `${client.firstName} ${client.lastName}`
+                    })))
+                }
+            })
+        } catch(err) {
+        }
+    }, [])
 
-const Index = ({ clients }: InferGetStaticPropsType<typeof getStaticProps>) => {
-    const { data } = clients
-    const onRegister = () => {
-
+    const onRegister = async (data: IRegisterClient) => {
+        try {
+            const result = await request('POST', '/clients', data)
+            console.log({result})
+            // do something with this result
+        } catch (err) {
+            // do something with the error
+        }
     }
 
     return (
         <>
-            <ClientTable clients={data} onRegister={onRegister} />
+            <ClientTable clients={clients} onRegister={onRegister}/>
         </>
     );
 };

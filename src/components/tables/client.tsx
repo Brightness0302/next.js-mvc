@@ -1,21 +1,25 @@
+import {useState} from "react";
+import {useRouter} from "next/router";
 
-export default function ClientTable({
-    clients,
-    onRegister,
-}: {
-    clients: {
-        id: string;
-        avatar: string;
-        birthday: Date; 
-        email: string;
-        firstName: string; 
-        lastName: string; 
-        sex: string; 
-        supportTier: 'standard' | 'gold' | 'platinum';
-        hourlyRate: number;
-    }[];
-    onRegister: () => void;
-}) {
+import {IClient, IRegisterClient} from "../../types";
+import Modal from "../Modal";
+import RegisterClientForm from "../forms/RegisterClientForm";
+
+export default function ClientTable(
+    {
+        clients,
+        onRegister,
+    }: {
+        clients: IClient[];
+        onRegister: (data: IRegisterClient) => void;
+    }
+) {
+    // Get query parameter for highlight
+    const router = useRouter()
+    const { highlight } = router.query
+    // True or false for showing of registration modal
+    const [ showRegisterModal, setShowRegisterModal ] = useState<boolean>(false)
+
     return (
         <>
             <div className='border-b border-gray-200 bg-white px-4 py-5 sm:px-6'>
@@ -29,7 +33,7 @@ export default function ClientTable({
                         <button
                             type='button'
                             className='relative inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
-                            onClick={() => onRegister()}
+                            onClick={() => setShowRegisterModal(true)}
                         >
                             Register new client
                         </button>
@@ -42,30 +46,30 @@ export default function ClientTable({
                             <div className='inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8'>
                                 <table className='min-w-full divide-y divide-gray-300'>
                                     <thead>
-                                        <tr>
-                                            <th
-                                                scope='col'
-                                                className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0'
-                                            >
-                                                Name
-                                            </th>
-                                            <th
-                                                scope='col'
-                                                className='px-3 py-3.5 text-left text-sm font-semibold text-gray-900'
-                                            >
-                                                Rate
-                                            </th>
-                                            <th
-                                                scope='col'
-                                                className='px-3 py-3.5 text-left text-sm font-semibold text-gray-900'
-                                            >
-                                                Support Tier
-                                            </th>
-                                        </tr>
+                                    <tr>
+                                        <th
+                                            scope='col'
+                                            className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0'
+                                        >
+                                            Name
+                                        </th>
+                                        <th
+                                            scope='col'
+                                            className='px-3 py-3.5 text-left text-sm font-semibold text-gray-900'
+                                        >
+                                            Rate
+                                        </th>
+                                        <th
+                                            scope='col'
+                                            className='px-3 py-3.5 text-left text-sm font-semibold text-gray-900'
+                                        >
+                                            Support Tier
+                                        </th>
+                                    </tr>
                                     </thead>
                                     <tbody className='divide-y divide-gray-200 bg-white'>
                                         {clients.map((client) => (
-                                            <tr key={client.id}>
+                                            <tr key={client.id} className={(highlight == client.id)?"bg-sandy":"bg-white"}>
                                                 <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-0'>
                                                     <div className='flex items-center'>
                                                         <div className='h-10 w-10 flex-shrink-0'>
@@ -80,7 +84,7 @@ export default function ClientTable({
                                                         <div className='ml-4'>
                                                             <div className='font-medium text-gray-900'>
                                                                 {
-                                                                    client.firstName + ' ' + client.lastName
+                                                                    client.fullName
                                                                 }
                                                             </div>
                                                             <div className='text-gray-500 select-all'>
@@ -120,6 +124,11 @@ export default function ClientTable({
                     </div>
                 </div>
             </div>
+            {showRegisterModal && (
+                <Modal open={showRegisterModal} handleClose={() => setShowRegisterModal(false)}>
+                    <RegisterClientForm onRegister={onRegister} handleClose={() => setShowRegisterModal(false)}/>
+                </Modal>
+            )}
         </>
     );
 }

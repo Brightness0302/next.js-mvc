@@ -3,8 +3,10 @@ import { faker } from '@faker-js/faker';
 
 const createRandomClient = () => {
     const sex = faker.name.sexType();
+    //Get firstName which is matching to sex
     const firstName = faker.name.firstName(sex);
     const lastName = faker.name.lastName();
+    //Get email which is matching to firstName and lastName
     const email = faker.internet.email(firstName, lastName);
 
     return {
@@ -30,7 +32,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             const clients = [
                 ...Array.from(Array(20)).map(() => createRandomClient()),
             ];
-            res.status(200).json({ data: clients });
+            res.status(200).json({ clients });
             break;
         case 'POST':
             break;
